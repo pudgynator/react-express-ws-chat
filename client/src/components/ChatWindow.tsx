@@ -4,7 +4,7 @@ import { MessageInput } from "./MessageInput";
 import type { ConnectionStatus as Status } from "../useChatSocket";
 
 type ChatWindowProps = {
-    username: string | null;
+    username: string;
     messages: WSMessage[];
     status: Status;
     onSend: (text: string) => void;
