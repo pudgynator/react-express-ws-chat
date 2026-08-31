@@ -11,7 +11,7 @@ export function MessageList({messages, currentUser}: MessageListProps  ) {
     const bottomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        bottomRef.current?.scrollIntoView({ behavior: 'instant' });
     }, [messages])
     return (
         <div className='flex-1 overflow-y-auto px-4 py-3'>
