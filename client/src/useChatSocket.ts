@@ -42,8 +42,8 @@ export function useChatSocket(username: string | null) {
         const trimmed = text.trim();
         if (!trimmed || socketRef.current?.readyState !== WebSocket.OPEN) return;
 
-        socketRef.current.send(JSON.stringify({ text: trimmed }));
-    }
+        socketRef.current.send(JSON.stringify({ type: 'message',text: trimmed }));
+    };
 
     return { messages, status, sendMessage };
 }

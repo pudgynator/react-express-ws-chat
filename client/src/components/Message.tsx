@@ -19,15 +19,15 @@ export function Message({ message, isOwn }: MessageProps) {
                 className={`max-w-[70%] rounded-2xl px4 py-2 text-sm
                     ${ isOwn 
                         ? 'bg-amber-700 text-white rounded-br-sm' 
-                        : 'bg-amber-100 text-taupe-900 rounded-bl-sm'}
+                        : 'bg-amber-200 text-taupe-900 rounded-bl-sm'}
                 `}
             >
-                {isOwn && (
-                    <div className='text-xs font-semibold text-taupe-500 mb-0.5'>
+                {!isOwn && (
+                    <div className='text-xs font-semibold text-taupe-900 mb-0.5 px-2'>
                         {message.user}
                     </div>
                 )}
-                <div>
+                <div className="px-2">
                     {message.text}
                 </div>
             </div>
