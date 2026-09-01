@@ -9,19 +9,19 @@ A simple real-time chat application built with React, Express, and WebSocket —
 ## Getting Started
 
 ### 1. Backend
-\`\`\`bash
+```bash
 cd server
 npm install
 npm run dev
-\`\`\`
+```
 Runs on the port set in `server/.env` (defaults if unset).
 
 ### 2. Frontend
-\`\`\`bash
+```bash
 cd client
 npm install
 npm run dev
-\`\`\`
+```
 Runs at `http://localhost:5173`.
 
 Open two browser tabs, join with two different names, and start chatting.
