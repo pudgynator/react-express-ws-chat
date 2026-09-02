@@ -2,6 +2,10 @@
 
 A simple real-time chat application built with React, Express, and WebSocket — written entirely in TypeScript. Two users can join with a username and exchange messages instantly, with live join/leave notifications and connection status.
 
+## Demo
+
+![Chat app demo](./assets/chat-demo.gif)
+
 ## Stack
 - **Frontend:** React + Vite + TypeScript + Tailwind CSS
 - **Backend:** Express + `ws` + TypeScript (ESM)
