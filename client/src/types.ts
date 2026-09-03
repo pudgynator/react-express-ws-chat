@@ -12,4 +12,10 @@ export type SystemMessage = {
     timestamp: number;
 };
 
-export type WSMessage = ChatMessage | SystemMessage;
+export type TypingMessage = {
+    type: 'typing';
+    user: string;
+}
+
+export type WSMessage = ChatMessage | SystemMessage | TypingMessage;
+export type StoredMessage = ChatMessage | SystemMessage;

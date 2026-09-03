@@ -12,7 +12,12 @@ export type SystemMessage = {
     timestamp: number;
 };
 
-export type WSMessage = ChatMessage | SystemMessage;
+export type TypingMessage = {
+    type: "typing";
+    user: string;
+};
+
+export type WSMessage = ChatMessage | SystemMessage | TypingMessage;
 
 export function isIncomingChatMessage(data: unknown): data is { type: "message"; text: string } {
     return (
