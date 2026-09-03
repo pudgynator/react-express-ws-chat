@@ -1,7 +1,7 @@
-import type { WSMessage } from "../types";
+import type { StoredMessage } from "../types";
 
 type MessageProps = {
-    message: WSMessage;
+    message: StoredMessage;
     isOwn: boolean;
 }
 
@@ -29,6 +29,9 @@ export function Message({ message, isOwn }: MessageProps) {
                 )}
                 <div className="px-2">
                     {message.text}
+                </div>
+                <div className="text-right text-xs text-taupe-400 mt-0.5 px-2">
+                    {new Date(message.timestamp).toLocaleTimeString([], {timeStyle: 'short'})}
                 </div>
             </div>
         </div>
