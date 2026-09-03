@@ -48,12 +48,19 @@ wss.on('connection', (ws, req) => {
           return;
         }
 
-        if (!isIncomingChatMessage(parsed)) {
-          return;
-        };
-
         const clientInfo = clients.get(ws);
         if (!clientInfo) return;
+
+        if (
+            typeof parsed === "object" &&
+            parsed !== null &&
+            (parsed as Record<string, unknown>).type === "typing"
+        ) {
+            broadcast({ type: "typing", user: clientInfo.username });
+            return;
+        }
+
+        if (!isIncomingChatMessage(parsed)) return;
 
         broadcast({
             type: "message",

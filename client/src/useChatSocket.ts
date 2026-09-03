@@ -1,12 +1,15 @@
-import type { WSMessage } from "./types";
+import type { StoredMessage, WSMessage } from "./types";
 import { useEffect, useRef, useState } from "react";
 
 export type ConnectionStatus = "connecting" | "open" | "closed";
+const typing_timeout = 2000;
 
 export function useChatSocket(username: string | null) {
-    const [messages, setMessages] = useState<WSMessage[]>([]);
+    const [messages, setMessages] = useState<StoredMessage[]>([]);
+    const [typingUsers, setTypingUsers] = useState<string[]>([]);
     const [status, setStatus] = useState<ConnectionStatus>("connecting");
     const socketRef = useRef<WebSocket | null>(null);
+    const typingTimeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
     useEffect(() => {
         if (!username) return;
@@ -26,7 +29,31 @@ export function useChatSocket(username: string | null) {
         socket.onmessage = (event: MessageEvent<string>) => {
             try {
                 const data: WSMessage = JSON.parse(event.data);
-                setMessages((prevMessages) => [...prevMessages, data]);
+
+                if (data.type === 'typing') {
+                    const user = data.user;
+
+                    setTypingUsers((prevTyping) => {
+                        if (!prevTyping.includes(user)) {
+                            return [...prevTyping, user];
+                        }
+                        return prevTyping;
+                    });
+
+                    const existingTimeout = typingTimeouts.current.get(user);
+                    if (existingTimeout) clearTimeout(existingTimeout);
+
+                    const newTimeout = setTimeout(() => {
+                        setTypingUsers((prev) => prev.filter((u) => u !== user));
+                        typingTimeouts.current.delete(user);
+                    }, typing_timeout);
+
+                    typingTimeouts.current.set(user, newTimeout);
+                    return;
+                } else {
+                    setMessages((prevMessages) => [...prevMessages, data]);
+                };
+ 
             } catch {
                 console.error("Failed to parse message:", event.data);
             }
@@ -35,6 +62,8 @@ export function useChatSocket(username: string | null) {
         return () => {
             socket.close();
             socketRef.current = null;
+            typingTimeouts.current.forEach((t) => clearTimeout(t));
+            typingTimeouts.current.clear();
         };
     }, [username]);
 
@@ -44,6 +73,11 @@ export function useChatSocket(username: string | null) {
 
         socketRef.current.send(JSON.stringify({ type: 'message',text: trimmed }));
     };
+    
+    function sendTyping() {
+        if (socketRef.current?.readyState !== WebSocket.OPEN) return;
+        socketRef.current.send(JSON.stringify({ type: 'typing' }));
+    }
 
-    return { messages, status, sendMessage };
+    return { messages, status,typingUsers, sendMessage, sendTyping};
 }
