@@ -17,7 +17,12 @@ export type TypingMessage = {
     user: string;
 };
 
-export type WSMessage = ChatMessage | SystemMessage | TypingMessage;
+export type PresenceMessage = {
+    type: 'presence';
+    users: string[];
+}
+
+export type WSMessage = ChatMessage | SystemMessage | TypingMessage | PresenceMessage;;
 
 export function isIncomingChatMessage(data: unknown): data is { type: "message"; text: string } {
     return (

@@ -17,5 +17,10 @@ export type TypingMessage = {
     user: string;
 }
 
-export type WSMessage = ChatMessage | SystemMessage | TypingMessage;
+export type PresenceMessage = {
+    type: 'presence';
+    users: string[];
+}
+
+export type WSMessage = ChatMessage | SystemMessage | TypingMessage | PresenceMessage;
 export type StoredMessage = ChatMessage | SystemMessage;
