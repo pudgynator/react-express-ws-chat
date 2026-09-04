@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-import type { WSMessage } from "../types";
+import type { StoredMessage } from "../types";
 import { Message } from "./Message";
 
 type MessageListProps = {
-    messages: WSMessage[];
+    messages: StoredMessage[];
     currentUser: string;
 }
 

@@ -1,4 +1,4 @@
-import type { WSMessage } from "../types";
+import type { StoredMessage } from "../types";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import type { ConnectionStatus as Status } from "../useChatSocket";
@@ -6,21 +6,26 @@ import { ConnectionStatus } from "./ConnectionStatus";
 
 type ChatWindowProps = {
     username: string;
-    messages: WSMessage[];
+    messages: StoredMessage[];
     status: Status;
     onSend: (text: string) => void;
     onTyping: () => void;
     typingUsers: string[];
+    presentUsers: string[];
   }
 
-export function ChatWindow({ username, messages, status, onSend, onTyping, typingUsers}: ChatWindowProps) {
+export function ChatWindow({ username, messages, status, onSend, onTyping, typingUsers, presentUsers}: ChatWindowProps) {
     const othersTyping = typingUsers.filter((u) => u !== username);
-
+    const onlineUsers = presentUsers.length;
     return (
         <div className='flex h-[600px] w-full max-w-md flex-col rounded-2xl border border-taupe-200 shadow-sm'>
             <div className='flex items-center justify-between border-b border-taupe-200 px-4 py-3'>
                 <span className="font-semibold text-taupe-900">Chat</span>
+                <div className="text-sm text-taupe-700">
+                    {onlineUsers} online
+                </div>
                 <ConnectionStatus status={status} />
+                
             </div>
     
             <MessageList messages={messages} currentUser={username} />

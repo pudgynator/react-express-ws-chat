@@ -40,6 +40,11 @@ wss.on('connection', (ws, req) => {
         timestamp: Date.now(),
     });
 
+    broadcast({
+        type: 'presence',
+        users: Array.from(clients.values()).map(client => client.username),
+    })
+
     ws.on('message', (raw) => {
         let parsed: unknown;
         try {
@@ -74,11 +79,16 @@ wss.on('connection', (ws, req) => {
         const clientInfo = clients.get(ws);
         clients.delete(ws);
         if (clientInfo) {
-          broadcast({
-            type: "system",
-            text: `${clientInfo.username} left the chat`,
-            timestamp: Date.now(),
-          });
+            broadcast({
+                type: "system",
+                text: `${clientInfo.username} left the chat`,
+                timestamp: Date.now(),
+            });
+
+            broadcast({
+                type: 'presence',
+                users: Array.from(clients.values()).map(client => client.username),
+            })
         }
     });
 

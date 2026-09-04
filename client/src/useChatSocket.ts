@@ -7,6 +7,7 @@ const typing_timeout = 2000;
 export function useChatSocket(username: string | null) {
     const [messages, setMessages] = useState<StoredMessage[]>([]);
     const [typingUsers, setTypingUsers] = useState<string[]>([]);
+    const [presentUsers , setPresentUsers] = useState<string[]>([]);
     const [status, setStatus] = useState<ConnectionStatus>("connecting");
     const socketRef = useRef<WebSocket | null>(null);
     const typingTimeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
@@ -50,6 +51,8 @@ export function useChatSocket(username: string | null) {
 
                     typingTimeouts.current.set(user, newTimeout);
                     return;
+                } if (data.type === 'presence') {
+                    setPresentUsers(data.users);
                 } else {
                     setMessages((prevMessages) => [...prevMessages, data]);
                 };
@@ -79,5 +82,5 @@ export function useChatSocket(username: string | null) {
         socketRef.current.send(JSON.stringify({ type: 'typing' }));
     }
 
-    return { messages, status,typingUsers, sendMessage, sendTyping};
+    return { messages, status, typingUsers, presentUsers, sendMessage, sendTyping};
 }
