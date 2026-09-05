@@ -22,7 +22,13 @@ export type PresenceMessage = {
     users: string[];
 }
 
-export type WSMessage = ChatMessage | SystemMessage | TypingMessage | PresenceMessage;;
+export type WelcomeMessage = {
+    type: "welcome";
+    username: string;
+};
+  
+
+export type WSMessage = ChatMessage | SystemMessage | TypingMessage | PresenceMessage | WelcomeMessage;
 
 export function isIncomingChatMessage(data: unknown): data is { type: "message"; text: string } {
     return (

@@ -28,11 +28,32 @@ function broadcast(msg: WSMessage ) {
     }
 };
 
+function getUniqueUsername(requested: string): string {
+    const existingUsernames = Array.from(clients.values()).map(client => client.username);
+
+    if (!existingUsernames.includes(requested)) {
+        return requested;
+    }
+
+    let suffix = 2;
+    let newUsername = requested + suffix;
+
+    while (existingUsernames.includes(newUsername)) {
+        suffix++;
+        newUsername  = requested + suffix;
+    };
+
+    return newUsername;
+}
+
 wss.on('connection', (ws, req) => {
     const url = new URL(req.url ?? '', `http://${req.headers.host}` )
-    const username = url.searchParams.get('username')?.trim() || 'Anonymous';
+    const requestedUsername= url.searchParams.get('username')?.trim() || 'Anonymous';
+
+    const username = getUniqueUsername(requestedUsername);
     clients.set(ws, { username });
 
+    ws.send(JSON.stringify({ type: 'welcome', username }));
 
     broadcast({
         type: "system",
