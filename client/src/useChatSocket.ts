@@ -8,6 +8,7 @@ export function useChatSocket(username: string | null) {
     const [messages, setMessages] = useState<StoredMessage[]>([]);
     const [typingUsers, setTypingUsers] = useState<string[]>([]);
     const [presentUsers , setPresentUsers] = useState<string[]>([]);
+    const [resolvedUsername, setResolvedUsername] = useState<string | null>(null);
     const [status, setStatus] = useState<ConnectionStatus>("connecting");
     const socketRef = useRef<WebSocket | null>(null);
     const typingTimeouts = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
@@ -30,6 +31,11 @@ export function useChatSocket(username: string | null) {
         socket.onmessage = (event: MessageEvent<string>) => {
             try {
                 const data: WSMessage = JSON.parse(event.data);
+
+                if (data.type === "welcome") {
+                    setResolvedUsername(data.username);
+                    return;
+                }
 
                 if (data.type === 'typing') {
                     const user = data.user;
@@ -82,5 +88,5 @@ export function useChatSocket(username: string | null) {
         socketRef.current.send(JSON.stringify({ type: 'typing' }));
     }
 
-    return { messages, status, typingUsers, presentUsers, sendMessage, sendTyping};
+    return { messages, status, typingUsers, presentUsers, username: resolvedUsername ?? username, sendMessage, sendTyping};
 }

@@ -5,7 +5,7 @@ import { useChatSocket } from "./useChatSocket";
 
 function App() {
     const [username, setUsername] = useState<string | null>(null);
-    const { messages, status, typingUsers, presentUsers, sendMessage, sendTyping } = useChatSocket(username);
+    const { messages, status, typingUsers, presentUsers, username: resolvedUsername, sendMessage, sendTyping } = useChatSocket(username);
 
     if (!username) {
       return <LoginScreen onJoin={setUsername} />; 
@@ -13,7 +13,7 @@ function App() {
     return (
       <div className="flex h-screen items-center justify-center bg-taupe-100">
         <ChatWindow 
-            username={username}
+            username={resolvedUsername ?? username}
             messages={messages}
             status={status}
             onSend={sendMessage}
