@@ -2,7 +2,8 @@
 
 ## About
 
-A simple real-time chat application built with React, Express, and WebSocket — written entirely in TypeScript. Two users can join with a username and exchange messages instantly, with live join/leave notifications and connection status.
+A simple real-time chat application built with React, Express, and WebSocket — written entirely in TypeScript.
+Users can join with a username and exchange messages instantly, with live join/leave notifications and connection status.
 
 **Features:**
 - Real-time messaging over a persistent WebSocket connection
@@ -39,8 +40,8 @@ npm run dev
 ```
 Runs at `http://localhost:5173`.
 
-Open two browser tabs, join with two different names, and start chatting.
+Open two (or more) browser tabs, join with two different names, and start chatting.
 
 ## Notes
 - Messages are held in memory only — no persistence across server restarts.
-- No authentication — usernames are self-declared on join.
+- No authentication — usernames are self-declared on join, with automatic suffixing on collision.
